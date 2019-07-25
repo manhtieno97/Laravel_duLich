@@ -11,6 +11,24 @@
 |
 */
 
-Route::get('/hi', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('backend.home');
+// });
+Route::group(['namespace'=>'Admin'],function(){
+    Route::group(['prefix' => 'login','middleware'=>'CheckLogin'], function () {
+        Route::get('/','LoginController@getLogin');
+        Route::post('/','LoginController@postLogin')->name('post_login');
+        
+    });
+    Route::get('/','HomeController@logOut')->name('logout');
+
+    Route::group(['prefix' => 'admin','middleware'=>'CheckLogout'], function () {
+        Route::get('home','HomeController@getHome')->name('home');
+
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('user','UserController@getUser')->name('user');
+        });
+    });
+         
+    
 });
